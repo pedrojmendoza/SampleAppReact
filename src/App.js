@@ -13,12 +13,14 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <p>
-          This is version 3.
-        </p>
+        <Version number="3"/>
       </div>
     );
   }
+}
+
+function Version(props) {
+  return <p>This is version {props.number}.</p>
 }
 
 export default App;

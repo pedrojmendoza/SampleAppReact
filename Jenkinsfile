@@ -18,6 +18,6 @@ node {
 
   stage('End-to-end test') {
     sh "npm install cypress --save-dev"
-    sh "$(npm bin)/cypress run"
+    sh "./node_modules/.bin/cypress run"
   }
 }

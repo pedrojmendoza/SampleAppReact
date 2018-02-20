@@ -4,6 +4,7 @@ node {
   }
 
   stage('Build') {
+    sh "npm install"
     sh "npm run build"
   }
 

@@ -3,9 +3,9 @@ node {
     checkout scm
   }
 
-  stage('Build') {
+  stage('Build US version') {
     sh "npm install"
-    sh "npm run build"
+    sh "REACT_APP_US_FEATURE=true npm run build"
   }
 
   stage('Test') {

@@ -1,22 +1,9 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { FeatureToggleProvider, FeatureToggle } from 'react-feature-toggles';
+import FeatureToggle from './FeatureToggle';
 import SpainFeature from './SpainFeature';
 import USFeature from './USFeature';
-
-const toggleNames = {
-  SHOW_SPAIN: 'showSpain',
-  SHOW_US: 'showUS'
-  // ... add more here
-};
-
-const toggles = {
-  // Try setting this to true
-  [toggleNames.SHOW_SPAIN]: process.env.REACT_APP_ES_FEATURE === "true",
-  [toggleNames.SHOW_US]: process.env.REACT_APP_US_FEATURE === "true"
-  // ... add more here
-};
 
 class App extends Component {
   render() {
@@ -30,16 +17,12 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
         <Version number="5"/>
-        <FeatureToggleProvider featureToggleList={toggles}>
-          <div>
-            <FeatureToggle featureName={toggleNames.SHOW_SPAIN}>
-              <SpainFeature/>
-            </FeatureToggle>
-            <FeatureToggle featureName={toggleNames.SHOW_US}>
-              <USFeature/>
-            </FeatureToggle>
-          </div>
-        </FeatureToggleProvider>
+        <FeatureToggle show={process.env.REACT_APP_ES_FEATURE === "true"}>
+          <SpainFeature/>
+        </FeatureToggle>
+        <FeatureToggle show={process.env.REACT_APP_US_FEATURE === "true"}>
+          <USFeature/>
+        </FeatureToggle>
       </div>
     );
   }

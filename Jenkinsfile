@@ -13,7 +13,7 @@ node {
   }
 
   stage('Deploy to S3') {
-    sh "aws s3 sync build/ s3://menpedro-react-app --profile menpedro"
+    sh "aws s3 sync build/ s3://menpedro-react-app"
   }
 
   stage('End-to-end test') {

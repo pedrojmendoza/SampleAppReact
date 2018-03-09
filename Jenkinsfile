@@ -5,11 +5,15 @@ pipeline {
     pollSCM('* * * * *')
   }
 
+  parameters {
+    string(name: 'COUNTRY', defaultValue: 'US', description: 'Which country should be baked?')
+  }
+
   stages {
-    stage('Build US version') {
+    stage('Build') {
       steps {
         sh "npm install"
-        sh "REACT_APP_US_FEATURE=true npm run build"
+        sh "REACT_APP_${params.COUNTRY}_FEATURE=true npm run build"
       }
     }
 

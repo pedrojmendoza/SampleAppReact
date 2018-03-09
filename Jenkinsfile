@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  environment {
+    HOME="."
+  }
+
   parameters {
     string(name: 'COUNTRY', defaultValue: 'US', description: 'Which country should be baked?')
   }

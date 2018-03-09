@@ -6,7 +6,7 @@ pipeline {
   }
 
   parameters {
-    string(name: 'COUNTRY', defaultValue: 'US', description: 'Which country should be baked?')
+    string(name: 'COUNTRY', description: 'Which country should be baked?')
   }
 
   stages {

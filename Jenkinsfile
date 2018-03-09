@@ -34,6 +34,8 @@ pipeline {
       }
       steps {
         //sh "cd /my-app"
+        sh "pwd"
+        sh "ls -la"
         sh "npm install cypress --save-dev"
         sh "./node_modules/.bin/cypress run --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"
         //sh "cypress run --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"

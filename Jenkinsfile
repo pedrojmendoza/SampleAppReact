@@ -1,10 +1,6 @@
 pipeline {
   agent any
 
-  triggers {
-    pollSCM('* * * * *')
-  }
-
   parameters {
     string(name: 'COUNTRY', defaultValue: 'US', description: 'Which country should be baked?')
   }

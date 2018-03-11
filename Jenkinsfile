@@ -6,7 +6,7 @@ pipeline {
   }
 
   stages {
-    stage('Build core') {
+    stage('Build (core)') {
       steps {
         sh "npm install"
         sh "npm run build"
@@ -19,13 +19,13 @@ pipeline {
       }
     }
 
-    stage('Deploy to S3 preprod (country agnostic)') {
+    stage('Deploy to PRE-PROD (core)') {
       steps {
         sh "aws s3 sync build/ s3://menpedro-react-app-preprod"
       }
     }
 
-    stage('UI test (contry agnostic)') {
+    stage('UI test (core)') {
       steps {
         //sh "npm install cypress --save-dev"
         //sh "./node_modules/.bin/cypress run --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"
@@ -33,17 +33,14 @@ pipeline {
       }
     }
 
-    stage ('Country deployments') {
+    stage ('Build (per-country)') {
       parallel {
-        stage('Build US') {
+        stage('US') {
           steps {
             ws('US') {
               checkout scm
               sh "npm install"
               sh "REACT_APP_US_FEATURE=true npm run build"
-              sh "aws s3 sync build/ s3://menpedro-react-app-preprod-us"
-              sh "/tmp/node_modules/.bin/cypress run --spec cypress/integration/simple_spec_us.js --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"
-              sh "aws s3 sync build/ s3://menpedro-react-app-us"
             }
           }
         }
@@ -53,14 +50,67 @@ pipeline {
               checkout scm
               sh "npm install"
               sh "REACT_APP_ES_FEATURE=true npm run build"
-              sh "aws s3 sync build/ s3://menpedro-react-app-preprod-es"
-              sh "/tmp/node_modules/.bin/cypress run --spec cypress/integration/simple_spec_es.js --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"
-              sh "aws s3 sync build/ s3://menpedro-react-app-es"
             }
           }
         }
       }
     }
 
+    stage ('Deploy to PRE-PROD (per-country)') {
+      parallel {
+        stage('US') {
+          steps {
+            ws('US') {
+              sh "aws s3 sync build/ s3://menpedro-react-app-preprod-us"
+            }
+          }
+        }
+        stage('ES') {
+          steps {
+            ws('ES') {
+              sh "aws s3 sync build/ s3://menpedro-react-app-preprod-es"
+            }
+          }
+        }
+      }
+    }
+
+    stage ('UI Test (per-country)') {
+      parallel {
+        stage('US') {
+          steps {
+            ws('US') {
+              sh "/tmp/node_modules/.bin/cypress run --spec cypress/integration/simple_spec_us.js --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"
+            }
+          }
+        }
+        stage('ES') {
+          steps {
+            ws('ES') {
+              sh "/tmp/node_modules/.bin/cypress run --spec cypress/integration/simple_spec_es.js --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"
+            }
+          }
+        }
+      }
+    }
+
+    stage ('Deploy to PROD (per-country)') {
+      parallel {
+        stage('US') {
+          steps {
+            ws('US') {
+              sh "aws s3 sync build/ s3://menpedro-react-app-us"
+            }
+          }
+        }
+        stage('ES') {
+          steps {
+            ws('ES') {
+              sh "aws s3 sync build/ s3://menpedro-react-app-es"
+            }
+          }
+        }
+      }
+    }
   }
 }

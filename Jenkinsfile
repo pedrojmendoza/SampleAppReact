@@ -6,34 +6,15 @@ pipeline {
   }
 
   stages {
-    stage('Build (core)') {
+    stage('Build (core) and unit test') {
       steps {
         sh "npm install"
         sh "npm run build"
-      }
-    }
-
-    stage('Unit test') {
-      steps {
         sh "CI=true npm test"
       }
     }
 
-    stage('Deploy to PRE-PROD (core)') {
-      steps {
-        sh "aws s3 sync build/ s3://menpedro-react-app-preprod"
-      }
-    }
-
-    stage('UI test (core)') {
-      steps {
-        //sh "npm install cypress --save-dev"
-        //sh "./node_modules/.bin/cypress run --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"
-        sh "/tmp/node_modules/.bin/cypress run --spec cypress/integration/simple_spec.js --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"
-      }
-    }
-
-    stage ('Build (per-country)') {
+    stage ('Build') {
       parallel {
         stage('US') {
           steps {
@@ -56,7 +37,7 @@ pipeline {
       }
     }
 
-    stage ('Deploy to PRE-PROD (per-country)') {
+    stage ('Deploy to PRE-PROD') {
       parallel {
         stage('US') {
           steps {
@@ -75,7 +56,7 @@ pipeline {
       }
     }
 
-    stage ('UI Test (per-country)') {
+    stage ('UI Test') {
       parallel {
         stage('US') {
           steps {
@@ -94,7 +75,7 @@ pipeline {
       }
     }
 
-    stage ('Deploy to PROD (per-country)') {
+    stage ('Deploy to PROD') {
       parallel {
         stage('US') {
           steps {

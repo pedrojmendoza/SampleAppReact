@@ -7,5 +7,7 @@ describe('My First Test', function() {
     cy.contains('This is a Spain compliance step')
     cy.contains('Next').click()
     cy.contains('This is yet another (common) step')
+    cy.contains('Next').click()
+    cy.contains('This is yet another (Spain specific) step')
   })
 })

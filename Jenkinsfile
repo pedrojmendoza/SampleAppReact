@@ -38,6 +38,7 @@ pipeline {
         stage('Build US') {
           steps {
             ws('US') {
+              checkout scm
               sh "npm install"
               sh "REACT_APP_US_FEATURE=true npm run build"
               sh "aws s3 sync build/ s3://menpedro-react-app-preprod-us"
@@ -49,6 +50,7 @@ pipeline {
         stage('Build ES') {
           steps {
             ws('ES') {
+              checkout scm
               sh "npm install"
               sh "REACT_APP_ES_FEATURE=true npm run build"
               sh "aws s3 sync build/ s3://menpedro-react-app-preprod-es"

@@ -11,7 +11,7 @@ class SpainWizard extends Component {
     [
       {name: 'Step1', component: <WelcomeStep/>},
       {name: 'Step2', component: <SpainComplianceStep/>},
-      {name: 'Step3', component: <YetAnotherStep/>}
+      {name: 'Step3', component: <YetAnotherStep/>},
       {name: 'Step4', component: <YetAnotherSpainStep/>}
     ]
 

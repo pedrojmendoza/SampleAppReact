@@ -34,7 +34,8 @@ pipeline {
             HOME="."
           }
           steps {
-            ws('US') {
+            ws('./US') {
+              sh "cd US"
               checkout scm
               sh "npm install"
               sh "REACT_APP_US_FEATURE=true npm run build"
@@ -51,7 +52,8 @@ pipeline {
             HOME="."
           }
           steps {
-            ws('ES') {
+            ws('./ES') {
+              sh "cd ES"
               checkout scm
               sh "npm install"
               sh "REACT_APP_ES_FEATURE=true npm run build"

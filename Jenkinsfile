@@ -16,9 +16,6 @@ pipeline {
         HOME="."
       }
       steps {
-        sh "rm -rf .npm"
-        sh "rm -rf .config"
-        sh "rm -rf node_modules"
         sh "npm install"
         sh "npm run build"
         sh "CI=true npm test"
@@ -37,10 +34,9 @@ pipeline {
             HOME="."
           }
           steps {
-            sh "rm -rf build_US"
             sh "npm install"
             sh "REACT_APP_US_FEATURE=true npm run build"
-            sh "mv build build_US"
+            stash includes: 'build/*', name: 'build_US'
           }
         }
         stage('Build ES') {
@@ -53,10 +49,9 @@ pipeline {
             HOME="."
           }
           steps {
-            sh "rm -rf build_ES"
             sh "npm install"
             sh "REACT_APP_ES_FEATURE=true npm run build"
-            sh "mv build build_ES"
+            stash includes: 'build/*', name: 'build_ES'
           }
         }
       }
@@ -66,12 +61,16 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            sh "aws s3 sync build_US/ s3://menpedro-react-app-preprod-us"
+            unstash 'build_US'
+            sh "ls -la"
+            sh "aws s3 sync build/ s3://menpedro-react-app-preprod-us"
           }
         }
         stage('ES') {
           steps {
-            sh "aws s3 sync build_ES/ s3://menpedro-react-app-preprod-es"
+            unstash 'build_ES'
+            sh "ls -la"
+            sh "aws s3 sync build/ s3://menpedro-react-app-preprod-es"
           }
         }
       }
@@ -96,12 +95,14 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            sh "aws s3 sync build_US/ s3://menpedro-react-app-us"
+            unstash 'build_US'
+            sh "aws s3 sync build/ s3://menpedro-react-app-us"
           }
         }
         stage('ES') {
           steps {
-            sh "aws s3 sync build_ES/ s3://menpedro-react-app-es"
+            unstash 'build_ES'
+            sh "aws s3 sync build/ s3://menpedro-react-app-es"
           }
         }
       }

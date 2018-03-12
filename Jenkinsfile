@@ -18,7 +18,7 @@ pipeline {
       steps {
         deleteDir()
         checkout scm
-        sleep 5 SECONDS
+        sleep 5
         sh "npm install"
         sh "npm run build"
         sh "CI=true npm test"

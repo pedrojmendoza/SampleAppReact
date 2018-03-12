@@ -16,6 +16,9 @@ pipeline {
         HOME="."
       }
       steps {
+        sh "rm -rf .npm"
+        sh "rm -rf .config"
+        sh "rm -rf node_modules"
         sh "npm install"
         sh "npm run build"
         sh "CI=true npm test"
@@ -34,11 +37,9 @@ pipeline {
             HOME="."
           }
           steps {
-            sh "mkdir US"
-            sh "cd US"
-            checkout scm
-            sh "npm install"
+            sh "rm -rf build_US"
             sh "REACT_APP_US_FEATURE=true npm run build"
+            sh "mv build build_US"
           }
         }
         stage('Build ES') {
@@ -51,11 +52,9 @@ pipeline {
             HOME="."
           }
           steps {
-            sh "mkdir ES"
-            sh "cd ES"
-            checkout scm
-            sh "npm install"
+            sh "rm -rf build_ES"
             sh "REACT_APP_ES_FEATURE=true npm run build"
+            sh "mv build build_ES"
           }
         }
       }
@@ -65,14 +64,12 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            sh "cd ${env.WORKSPACE}/US"
-            sh "aws s3 sync build/ s3://menpedro-react-app-preprod-us"
+            sh "aws s3 sync build_US/ s3://menpedro-react-app-preprod-us"
           }
         }
         stage('ES') {
           steps {
-            sh "cd ${env.WORKSPACE}/ES"
-            sh "aws s3 sync build/ s3://menpedro-react-app-preprod-es"
+            sh "aws s3 sync build_ES/ s3://menpedro-react-app-preprod-es"
           }
         }
       }
@@ -82,13 +79,11 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            sh "cd US"
             sh "/tmp/node_modules/.bin/cypress run --spec cypress/integration/simple_spec_us.js --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"
           }
         }
         stage('ES') {
           steps {
-            sh "cd ES"
             sh "/tmp/node_modules/.bin/cypress run --spec cypress/integration/simple_spec_es.js --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"
           }
         }
@@ -99,14 +94,12 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            sh "cd US"
-            sh "aws s3 sync build/ s3://menpedro-react-app-us"
+            sh "aws s3 sync build_US/ s3://menpedro-react-app-us"
           }
         }
         stage('ES') {
           steps {
-            sh "cd ES"
-            sh "aws s3 sync build/ s3://menpedro-react-app-es"
+            sh "aws s3 sync build_ES/ s3://menpedro-react-app-es"
           }
         }
       }

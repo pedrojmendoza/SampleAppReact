@@ -8,9 +8,9 @@ pipeline {
   stages {
     stage('Build (core) and unit test') {
       agent {
-          docker {
-              image 'node:6-alpine'
-          }
+        docker {
+          image 'node:latest'
+        }
       }
       environment {
         HOME="."
@@ -26,9 +26,9 @@ pipeline {
       parallel {
         stage('US') {
           agent {
-              docker {
-                  image 'node:6-alpine'
-              }
+            docker {
+              image 'node:latest'
+            }
           }
           environment {
             HOME="."
@@ -43,9 +43,9 @@ pipeline {
         }
         stage('Build ES') {
           agent {
-              docker {
-                  image 'node:6-alpine'
-              }
+            docker {
+              image 'node:latest'
+            }
           }
           environment {
             HOME="."

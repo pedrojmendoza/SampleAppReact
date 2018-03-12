@@ -16,6 +16,7 @@ pipeline {
         HOME="."
       }
       steps {
+        sh "npm cache clean"
         sh "npm install"
         sh "npm run build"
         sh "CI=true npm test"

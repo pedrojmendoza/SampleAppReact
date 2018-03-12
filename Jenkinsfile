@@ -17,8 +17,9 @@ pipeline {
       }
       steps {
         deleteDir()
+        sh "mkdir core"
+        sh "cd core"
         checkout scm
-        sh 'cd $PWD'
         sh "npm install"
         sh "npm run build"
         sh "CI=true npm test"

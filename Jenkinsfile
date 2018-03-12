@@ -83,7 +83,7 @@ pipeline {
         stage('US') {
           agent {
             docker {
-              image 'cypress/base:6'
+              image 'cypress/base:centos7'
             }
           }
           environment {
@@ -97,7 +97,7 @@ pipeline {
         stage('ES') {
           agent {
             docker {
-              image 'cypress/base:6'
+              image 'cypress/base:centos7'
             }
           }
           environment {

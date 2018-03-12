@@ -12,6 +12,9 @@ pipeline {
               image 'node:6-alpine'
           }
       }
+      environment {
+        HOME="."
+      }
       steps {
         sh "npm install"
         sh "npm run build"
@@ -27,6 +30,9 @@ pipeline {
                   image 'node:6-alpine'
               }
           }
+          environment {
+            HOME="."
+          }
           steps {
             ws('US') {
               checkout scm
@@ -40,6 +46,9 @@ pipeline {
               docker {
                   image 'node:6-alpine'
               }
+          }
+          environment {
+            HOME="."
           }
           steps {
             ws('ES') {

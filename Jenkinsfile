@@ -16,7 +16,8 @@ pipeline {
         HOME="."
       }
       steps {
-        sh "npm cache clean --force"
+        deleteDir()
+        checkout scm
         sh "npm install"
         sh "npm run build"
         sh "CI=true npm test"

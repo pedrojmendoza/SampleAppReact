@@ -66,13 +66,13 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            sh "cd US"
+            sh "cd ${env.WORKSPACE}/US"
             sh "aws s3 sync build/ s3://menpedro-react-app-preprod-us"
           }
         }
         stage('ES') {
           steps {
-            sh "cd ES"
+            sh "cd ${env.WORKSPACE}/ES"
             sh "aws s3 sync build/ s3://menpedro-react-app-preprod-es"
           }
         }

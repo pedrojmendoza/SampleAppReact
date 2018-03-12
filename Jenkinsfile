@@ -7,6 +7,12 @@ pipeline {
 
   stages {
     stage('Build (core) and unit test') {
+      agent {
+          docker {
+              image 'node:6-alpine'
+              args '-p 3000:3000'
+          }
+      }
       steps {
         sh "npm install"
         sh "npm run build"
@@ -15,6 +21,12 @@ pipeline {
     }
 
     stage ('Build') {
+      agent {
+          docker {
+              image 'node:6-alpine'
+              args '-p 3000:3000'
+          }
+      }      
       parallel {
         stage('US') {
           steps {

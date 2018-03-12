@@ -81,8 +81,10 @@ pipeline {
     stage ('UI Test') {
       parallel {
         stage('US') {
-          docker {
-            image 'cypress/base:6'
+          agent {
+            docker {
+              image 'cypress/base:6'
+            }
           }
           environment {
             HOME="."
@@ -93,8 +95,10 @@ pipeline {
           }
         }
         stage('ES') {
-          docker {
-            image 'cypress/base:6'
+          agent {
+            docker {
+              image 'cypress/base:6'
+            }
           }
           environment {
             HOME="."

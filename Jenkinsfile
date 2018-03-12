@@ -36,12 +36,12 @@ pipeline {
           }
         }
         stage('Build ES') {
+          agent {
+              docker {
+                  image 'node:6-alpine'
+              }
+          }
           steps {
-            agent {
-                docker {
-                    image 'node:6-alpine'
-                }
-            }                  
             ws('ES') {
               checkout scm
               sh "npm install"

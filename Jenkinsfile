@@ -38,6 +38,7 @@ pipeline {
           }
           steps {
             sh "rm -rf build_US"
+            sh "npm install"
             sh "REACT_APP_US_FEATURE=true npm run build"
             sh "mv build build_US"
           }
@@ -53,6 +54,7 @@ pipeline {
           }
           steps {
             sh "rm -rf build_ES"
+            sh "npm install"
             sh "REACT_APP_ES_FEATURE=true npm run build"
             sh "mv build build_ES"
           }

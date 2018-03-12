@@ -23,7 +23,7 @@ pipeline {
         HOME="."
       }
       steps {
-        echo ${PROXY}
+        echo "${PROXY}"
         script {
           if (${PROXY} != '') {
             sh "npm config set proxy ${PROXY}"

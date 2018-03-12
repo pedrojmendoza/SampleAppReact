@@ -10,7 +10,6 @@ pipeline {
       agent {
           docker {
               image 'node:6-alpine'
-              args '-p 3000:3000'
           }
       }
       steps {
@@ -21,14 +20,13 @@ pipeline {
     }
 
     stage ('Build') {
-      agent {
-          docker {
-              image 'node:6-alpine'
-              args '-p 3000:3000'
-          }
-      }      
       parallel {
         stage('US') {
+          agent {
+              docker {
+                  image 'node:6-alpine'
+              }
+          }
           steps {
             ws('US') {
               checkout scm
@@ -39,6 +37,11 @@ pipeline {
         }
         stage('Build ES') {
           steps {
+            agent {
+                docker {
+                    image 'node:6-alpine'
+                }
+            }                  
             ws('ES') {
               checkout scm
               sh "npm install"

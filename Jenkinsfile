@@ -9,7 +9,7 @@ pipeline {
     stage('Build (core) and unit test') {
       agent {
         docker {
-          image 'node:latest'
+          image 'node:8'
         }
       }
       environment {
@@ -27,7 +27,7 @@ pipeline {
         stage('US') {
           agent {
             docker {
-              image 'node:latest'
+              image 'node:8'
             }
           }
           environment {
@@ -44,7 +44,7 @@ pipeline {
         stage('Build ES') {
           agent {
             docker {
-              image 'node:latest'
+              image 'node:8'
             }
           }
           environment {

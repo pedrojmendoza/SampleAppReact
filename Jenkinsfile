@@ -23,11 +23,11 @@ pipeline {
         HOME="."
       }
       steps {
-        echo "${PROXY}"
+        echo "Will use ${params.PROXY} for proxying"
         script {
-          if (${PROXY} != '') {
-            sh "npm config set proxy ${PROXY}"
-            sh "npm config set https-proxy ${PROXY}"
+          if ("${params.PROXY}" != '') {
+            sh "npm config set proxy ${params.PROXY}"
+            sh "npm config set https-proxy ${params.PROXY}"
           }
         }
         sh "npm install"

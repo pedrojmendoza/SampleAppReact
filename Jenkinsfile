@@ -1,6 +1,13 @@
 pipeline {
   agent any
 
+  parameters {
+    string (
+      defaultValue: '',
+      description: 'Proxy URL',
+      name : 'PROXY')
+  }
+
   triggers {
     pollSCM('* * * * *')
   }
@@ -16,6 +23,13 @@ pipeline {
         HOME="."
       }
       steps {
+        echo ${PROXY}
+        script {
+          if (${PROXY} != '') {
+            sh "npm config set proxy ${PROXY}"
+            sh "npm config set https-proxy ${PROXY}"
+          }
+        }
         sh "npm install"
         sh "npm run build"
         sh "CI=true npm test"

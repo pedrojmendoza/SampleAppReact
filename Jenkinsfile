@@ -16,10 +16,6 @@ pipeline {
         HOME="."
       }
       steps {
-        deleteDir()
-        sh "mkdir core"
-        sh "cd ${env.WORKSPACE}/core"
-        checkout scm
         sh "npm install"
         sh "npm run build"
         sh "CI=true npm test"

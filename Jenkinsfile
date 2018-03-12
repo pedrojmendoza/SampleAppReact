@@ -61,16 +61,20 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            unstash 'build_US'
-            sh "ls -la"
-            sh "aws s3 sync build/ s3://menpedro-react-app-preprod-us"
+            dir("US") {
+              unstash 'build_US'
+              sh "ls -la"
+              sh "aws s3 sync build/ s3://menpedro-react-app-preprod-us"
+            }
           }
         }
         stage('ES') {
           steps {
-            unstash 'build_ES'
-            sh "ls -la"
-            sh "aws s3 sync build/ s3://menpedro-react-app-preprod-es"
+            dir("ES") {
+              unstash 'build_ES'
+              sh "ls -la"
+              sh "aws s3 sync build/ s3://menpedro-react-app-preprod-es"
+            }
           }
         }
       }
@@ -95,14 +99,18 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            unstash 'build_US'
-            sh "aws s3 sync build/ s3://menpedro-react-app-us"
+            dir("US") {
+              unstash 'build_US'
+              sh "aws s3 sync build/ s3://menpedro-react-app-us"
+            }
           }
         }
         stage('ES') {
           steps {
-            unstash 'build_ES'
-            sh "aws s3 sync build/ s3://menpedro-react-app-es"
+            dir("ES") {
+              unstash 'build_ES'
+              sh "aws s3 sync build/ s3://menpedro-react-app-es"
+            }
           }
         }
       }

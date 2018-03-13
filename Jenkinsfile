@@ -5,7 +5,8 @@ pipeline {
     string (
       defaultValue: '',
       description: 'Proxy URL',
-      name : 'PROXY')
+      name : 'PROXY'
+    )
   }
 
   triggers {
@@ -13,6 +14,21 @@ pipeline {
   }
 
   stages {
+    stage ('Deploy CFN') {
+      steps {
+        script {
+          STACK_EXISTS=0
+          sh ("aws cloudformation describe-stacks --stack-name my-react-app || STACK_EXISTS=1",
+          echo "Stack exists?: ${STACK_EXISTS}"
+          if ("${STACK_EXISTS}" == 1) {
+            echo "Creating stack"
+          } else {
+            echo "Updating stack"            
+          }
+        }
+      }
+    }
+
     stage('Build (core) and unit test') {
       agent {
         docker {

@@ -7,6 +7,11 @@ pipeline {
       description: 'Proxy URL',
       name : 'PROXY'
     )
+    string (
+      defaultValue: 'menpedro-react-app-tmp',
+      description: 'S3 prefix',
+      name : 'S3_PREFIX'
+    )
   }
 
   triggers {
@@ -14,16 +19,38 @@ pipeline {
   }
 
   stages {
-    stage ('Deploy CFN') {
-      steps {
-        script {
-          STACK_EXISTS=1
-          sh ("aws cloudformation describe-stacks --stack-name my-react-app || STACK_EXISTS=0")
-          echo "Stack exists?: ${STACK_EXISTS}"
-          if ("${STACK_EXISTS}" == 1) {
-            echo "Updating stack"
-          } else {
-            echo "Creating stack"
+    stage ('Deploy CFN preprod') {
+      parallel {
+        stage('US') {
+          steps {
+            script {
+              STACK_EXISTS=1
+              sh ("aws cloudformation describe-stacks --stack-name my-react-app-preprod-us || STACK_EXISTS=0")
+              echo "Stack exists?: ${STACK_EXISTS}"
+              if ("${STACK_EXISTS}" == 1) {
+                echo "Updating stack"
+                sh ("aws cloudformation update-stack --stack-name my-react-app-preprod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod")
+              } else {
+                echo "Creating stack"
+                sh ("aws cloudformation create-stack --stack-name my-react-app-preprod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod")
+              }
+            }
+          }
+        }
+        stage('ES') {
+          steps {
+            script {
+              STACK_EXISTS=1
+              sh ("aws cloudformation describe-stacks --stack-name my-react-app-preprod-es || STACK_EXISTS=0")
+              echo "Stack exists?: ${STACK_EXISTS}"
+              if ("${STACK_EXISTS}" == 1) {
+                echo "Updating stack"
+                sh ("aws cloudformation update-stack --stack-name my-react-app-preprod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod")
+              } else {
+                echo "Creating stack"
+                sh ("aws cloudformation create-stack --stack-name my-react-app-preprod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod")
+              }
+            }
           }
         }
       }

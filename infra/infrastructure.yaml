@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Provision S3 buckets
+
+Parameters:
+  Prefix:
+    Description: Prefix for the S3 buckets
+    Type: String
+    Default: menpedro-react-app-tmp
+  Country:
+    Description: Country
+    Type: String
+    Default: us
+    AllowedValues:
+      - us
+      - es
+  Environment:
+    Description: Environment
+    Type: String
+    Default: preprod
+    AllowedValues:
+      - preprod
+      - prod
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      BucketName: !Sub '${Prefix}-${Country}-${Environment}'
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+  S3BucketUSPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3Bucket
+      PolicyDocument:
+        Statement:
+          -
+            Action:
+              - s3:GetObject
+            Effect: Allow
+            Resource: !Sub 'arn:aws:s3:::${S3Bucket}/*'
+            Principal: "*"

@@ -98,9 +98,7 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            script {
-              processStack "${params.S3_PREFIX}", "us", "preprod"
-            }
+            processStack "${params.S3_PREFIX}", "us", "preprod"
           }
         }
         stage('ES') {

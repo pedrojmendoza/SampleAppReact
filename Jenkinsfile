@@ -101,7 +101,7 @@ pipeline {
                 returnStatus: true
               ) == 0
               echo "Stack exists?: ${STACK_EXISTS}"
-              if (${STACK_EXISTS}) {
+              if (STACK_EXISTS) {
                 echo "Updating stack"
                 sh ("aws cloudformation update-stack --stack-name my-react-app-preprod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod --region us-east-1")
               } else {
@@ -129,7 +129,7 @@ pipeline {
                 returnStatus: true
               ) == 0
               echo "Stack exists?: ${STACK_EXISTS}"
-              if (${STACK_EXISTS}) {
+              if (STACK_EXISTS) {
                 echo "Updating stack"
                 sh ("aws cloudformation update-stack --stack-name my-react-app-preprod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod --region us-east-1")
               } else {

@@ -1,4 +1,5 @@
-@Library('process-stack')_
+#!/usr/bin/env groovy
+library 'process-stack'
 
 pipeline {
   agent any

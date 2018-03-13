@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-library 'process-stack'
+library 'processStack'
 
 pipeline {
   agent any

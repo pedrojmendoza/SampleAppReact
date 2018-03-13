@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-def processStack(String s3Prefix, String country, String environment) {
+def call(String s3Prefix, String country, String environment) {
   script {
     STACK_EXISTS = sh (
       script: "aws cloudformation describe-stacks --stack-name my-react-app-${environment}-${country} --region us-east-1",

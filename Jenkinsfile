@@ -97,14 +97,14 @@ pipeline {
           steps {
             script {
               STACK_EXISTS=1
-              sh ("aws cloudformation describe-stacks --stack-name my-react-app-preprod-us || STACK_EXISTS=0")
+              sh ("aws cloudformation describe-stacks --stack-name my-react-app-preprod-us --region us-east-1 || STACK_EXISTS=0")
               echo "Stack exists?: ${STACK_EXISTS}"
               if ("${STACK_EXISTS}" == 1) {
                 echo "Updating stack"
-                sh ("aws cloudformation update-stack --stack-name my-react-app-preprod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod")
+                sh ("aws cloudformation update-stack --stack-name my-react-app-preprod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod --region us-east-1")
               } else {
                 echo "Creating stack"
-                sh ("aws cloudformation create-stack --stack-name my-react-app-preprod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod")
+                sh ("aws cloudformation create-stack --stack-name my-react-app-preprod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod --region us-east-1")
               }
             }
           }
@@ -113,14 +113,14 @@ pipeline {
           steps {
             script {
               STACK_EXISTS=1
-              sh ("aws cloudformation describe-stacks --stack-name my-react-app-preprod-es || STACK_EXISTS=0")
+              sh ("aws cloudformation describe-stacks --stack-name my-react-app-preprod-es --region us-east-1 || STACK_EXISTS=0")
               echo "Stack exists?: ${STACK_EXISTS}"
               if ("${STACK_EXISTS}" == 1) {
                 echo "Updating stack"
-                sh ("aws cloudformation update-stack --stack-name my-react-app-preprod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod")
+                sh ("aws cloudformation update-stack --stack-name my-react-app-preprod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod --region us-east-1")
               } else {
                 echo "Creating stack"
-                sh ("aws cloudformation create-stack --stack-name my-react-app-preprod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod")
+                sh ("aws cloudformation create-stack --stack-name my-react-app-preprod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod --region us-east-1")
               }
             }
           }
@@ -202,14 +202,14 @@ pipeline {
           steps {
             script {
               STACK_EXISTS=1
-              sh ("aws cloudformation describe-stacks --stack-name my-react-app-prod-us || STACK_EXISTS=0")
+              sh ("aws cloudformation describe-stacks --stack-name my-react-app-prod-us --region us-east-1 || STACK_EXISTS=0")
               echo "Stack exists?: ${STACK_EXISTS}"
               if ("${STACK_EXISTS}" == 1) {
                 echo "Updating stack"
-                sh ("aws cloudformation update-stack --stack-name my-react-app-prod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=prod")
+                sh ("aws cloudformation update-stack --stack-name my-react-app-prod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=prod --region us-east-1")
               } else {
                 echo "Creating stack"
-                sh ("aws cloudformation create-stack --stack-name my-react-app-prod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=prod")
+                sh ("aws cloudformation create-stack --stack-name my-react-app-prod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=prod --region us-east-1")
               }
             }
           }
@@ -218,14 +218,14 @@ pipeline {
           steps {
             script {
               STACK_EXISTS=1
-              sh ("aws cloudformation describe-stacks --stack-name my-react-app-prod-es || STACK_EXISTS=0")
+              sh ("aws cloudformation describe-stacks --stack-name my-react-app-prod-es --region us-east-1 || STACK_EXISTS=0")
               echo "Stack exists?: ${STACK_EXISTS}"
               if ("${STACK_EXISTS}" == 1) {
                 echo "Updating stack"
-                sh ("aws cloudformation update-stack --stack-name my-react-app-prod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=prod")
+                sh ("aws cloudformation update-stack --stack-name my-react-app-prod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=prod --region us-east-1")
               } else {
                 echo "Creating stack"
-                sh ("aws cloudformation create-stack --stack-name my-react-app-prod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=prod")
+                sh ("aws cloudformation create-stack --stack-name my-react-app-prod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=prod --region us-east-1")
               }
             }
           }

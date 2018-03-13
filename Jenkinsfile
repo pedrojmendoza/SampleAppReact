@@ -104,11 +104,11 @@ pipeline {
               if (STACK_EXISTS) {
                 echo "Updating stack"
                 sh ("aws cloudformation update-stack --stack-name my-react-app-preprod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod --region us-east-1")
-                sh ("aws cloudformation wait stack-create-complete --stack-name my-react-app-preprod-us --region us-east-1")
+                sh ("aws cloudformation wait stack-update-complete --stack-name my-react-app-preprod-us --region us-east-1")
               } else {
                 echo "Creating stack"
                 sh ("aws cloudformation create-stack --stack-name my-react-app-preprod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod --region us-east-1")
-                sh ("aws cloudformation wait stack-update-complete --stack-name my-react-app-preprod-us --region us-east-1")
+                sh ("aws cloudformation wait stack-create-complete --stack-name my-react-app-preprod-us --region us-east-1")
               }
             }
           }
@@ -124,11 +124,11 @@ pipeline {
               if (STACK_EXISTS) {
                 echo "Updating stack"
                 sh ("aws cloudformation update-stack --stack-name my-react-app-preprod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod --region us-east-1")
-                sh ("aws cloudformation wait stack-create-complete --stack-name my-react-app-preprod-es --region us-east-1")
+                sh ("aws cloudformation wait stack-update-complete --stack-name my-react-app-preprod-es --region us-east-1")
               } else {
                 echo "Creating stack"
                 sh ("aws cloudformation create-stack --stack-name my-react-app-preprod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod --region us-east-1")
-                sh ("aws cloudformation wait stack-update-complete --stack-name my-react-app-preprod-es --region us-east-1")
+                sh ("aws cloudformation wait stack-create-complete --stack-name my-react-app-preprod-es --region us-east-1")
               }
             }
           }

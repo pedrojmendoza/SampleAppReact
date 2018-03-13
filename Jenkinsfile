@@ -1,4 +1,4 @@
-library 'processStack'
+library 'processStack@master'
 
 pipeline {
   agent any

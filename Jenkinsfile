@@ -17,13 +17,13 @@ pipeline {
     stage ('Deploy CFN') {
       steps {
         script {
-          STACK_EXISTS=0
-          sh ("aws cloudformation describe-stacks --stack-name my-react-app || STACK_EXISTS=1",
+          STACK_EXISTS=1
+          sh ("aws cloudformation describe-stacks --stack-name my-react-app || STACK_EXISTS=0")
           echo "Stack exists?: ${STACK_EXISTS}"
           if ("${STACK_EXISTS}" == 1) {
-            echo "Creating stack"
+            echo "Updating stack"
           } else {
-            echo "Updating stack"            
+            echo "Creating stack"
           }
         }
       }

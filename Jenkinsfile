@@ -112,7 +112,7 @@ pipeline {
             waitUntil {
               script {
                 STACK_PROCESSING_COMPLETED = sh (
-                  script: "aws cloudformation describe-stacks --stack-name my-react-app-preprod-us --query 'Stacks[0].StackStatus' | grep COMPLETE",
+                  script: "aws cloudformation describe-stacks --stack-name my-react-app-preprod-us --region us-east-1 --query 'Stacks[0].StackStatus' | grep COMPLETE",
                   returnStdout: true
                 ).trim() == ''
                 echo "Waiting for stack processing being completed. Current completion status is: ${STACK_PROCESSING_COMPLETED}"
@@ -140,7 +140,7 @@ pipeline {
             waitUntil {
               script {
                 STACK_PROCESSING_COMPLETED = sh (
-                  script: "aws cloudformation describe-stacks --stack-name my-react-app-preprod-es --query 'Stacks[0].StackStatus' | grep COMPLETE",
+                  script: "aws cloudformation describe-stacks --stack-name my-react-app-preprod-es --region us-east-1 --query 'Stacks[0].StackStatus' | grep COMPLETE",
                   returnStdout: true
                 ).trim() == ''
                 echo "Waiting for stack processing being completed. Current completion status is: ${STACK_PROCESSING_COMPLETED}"

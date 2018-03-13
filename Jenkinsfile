@@ -107,6 +107,15 @@ pipeline {
                 sh ("aws cloudformation create-stack --stack-name my-react-app-preprod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod --region us-east-1")
               }
             }
+            waitUntil {
+              script {
+                STACK_PROCESSING_COMPLETED = sh (
+                  script: "aws cloudformation describe-stacks --stack-name my-react-app-preprod-us --query 'Stacks[0].StackStatus' | grep COMPLETE",
+                  returnStdout: true
+                ).trim()
+                return (STACK_PROCESSING_COMPLETED != '');
+              }
+            }
           }
         }
         stage('ES') {
@@ -121,6 +130,15 @@ pipeline {
               } else {
                 echo "Creating stack"
                 sh ("aws cloudformation create-stack --stack-name my-react-app-preprod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod --region us-east-1")
+              }
+            }
+            waitUntil {
+              script {
+                STACK_PROCESSING_COMPLETED = sh (
+                  script: "aws cloudformation describe-stacks --stack-name my-react-app-preprod-es --query 'Stacks[0].StackStatus' | grep COMPLETE",
+                  returnStdout: true
+                ).trim()
+                return (STACK_PROCESSING_COMPLETED != '');
               }
             }
           }

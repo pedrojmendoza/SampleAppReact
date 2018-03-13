@@ -23,9 +23,9 @@ pipeline {
         HOME="."
       }
       steps {
-        echo "Will use ${params.PROXY} for proxying"
         script {
           if ("${params.PROXY}" != '') {
+            echo "Will use ${params.PROXY} for proxying"
             sh "npm config set proxy ${params.PROXY}"
             sh "npm config set https-proxy ${params.PROXY}"
           }
@@ -48,6 +48,13 @@ pipeline {
             HOME="."
           }
           steps {
+            script {
+              if ("${params.PROXY}" != '') {
+                echo "Will use ${params.PROXY} for proxying"
+                sh "npm config set proxy ${params.PROXY}"
+                sh "npm config set https-proxy ${params.PROXY}"
+              }
+            }
             sh "npm install"
             sh "REACT_APP_US_FEATURE=true npm run build"
             stash includes: 'build/*', name: 'build_US'
@@ -63,6 +70,13 @@ pipeline {
             HOME="."
           }
           steps {
+            script {
+              if ("${params.PROXY}" != '') {
+                echo "Will use ${params.PROXY} for proxying"
+                sh "npm config set proxy ${params.PROXY}"
+                sh "npm config set https-proxy ${params.PROXY}"
+              }
+            }
             sh "npm install"
             sh "REACT_APP_ES_FEATURE=true npm run build"
             stash includes: 'build/*', name: 'build_ES'
@@ -104,6 +118,13 @@ pipeline {
             HOME="."
           }
           steps {
+            script {
+              if ("${params.PROXY}" != '') {
+                echo "Will use ${params.PROXY} for proxying"
+                sh "npm config set proxy ${params.PROXY}"
+                sh "npm config set https-proxy ${params.PROXY}"
+              }
+            }
             sh "npm install cypress --save-dev"
             sh "./node_modules/.bin/cypress run --spec cypress/integration/simple_spec_us.js --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"
           }
@@ -118,6 +139,13 @@ pipeline {
             HOME="."
           }
           steps {
+            script {
+              if ("${params.PROXY}" != '') {
+                echo "Will use ${params.PROXY} for proxying"
+                sh "npm config set proxy ${params.PROXY}"
+                sh "npm config set https-proxy ${params.PROXY}"
+              }
+            }
             sh "npm install cypress --save-dev"
             sh "./node_modules/.bin/cypress run --spec cypress/integration/simple_spec_es.js --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"
           }

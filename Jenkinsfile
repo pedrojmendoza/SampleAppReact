@@ -96,10 +96,12 @@ pipeline {
         stage('US') {
           steps {
             script {
-              STACK_EXISTS=1
-              sh ("aws cloudformation describe-stacks --stack-name my-react-app-preprod-us --region us-east-1 || STACK_EXISTS=0")
+              STACK_EXISTS = sh (
+                script: "aws cloudformation describe-stacks --stack-name my-react-app-preprod-us --region us-east-1",
+                returnStatus: true
+              ) == 0
               echo "Stack exists?: ${STACK_EXISTS}"
-              if ("${STACK_EXISTS}" == "1") {
+              if (${STACK_EXISTS}) {
                 echo "Updating stack"
                 sh ("aws cloudformation update-stack --stack-name my-react-app-preprod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod --region us-east-1")
               } else {
@@ -112,8 +114,9 @@ pipeline {
                 STACK_PROCESSING_COMPLETED = sh (
                   script: "aws cloudformation describe-stacks --stack-name my-react-app-preprod-us --query 'Stacks[0].StackStatus' | grep COMPLETE",
                   returnStdout: true
-                ).trim()
-                return (STACK_PROCESSING_COMPLETED != '');
+                ).trim() == ''
+                echo "Waiting for stack processing being completed. Current completion status is: ${STACK_PROCESSING_COMPLETED}"
+                return (STACK_PROCESSING_COMPLETED);
               }
             }
           }
@@ -121,10 +124,12 @@ pipeline {
         stage('ES') {
           steps {
             script {
-              STACK_EXISTS=1
-              sh ("aws cloudformation describe-stacks --stack-name my-react-app-preprod-es --region us-east-1 || STACK_EXISTS=0")
+              STACK_EXISTS = sh (
+                script: "aws cloudformation describe-stacks --stack-name my-react-app-preprod-es --region us-east-1",
+                returnStatus: true
+              ) == 0
               echo "Stack exists?: ${STACK_EXISTS}"
-              if ("${STACK_EXISTS}" == "1") {
+              if (${STACK_EXISTS}) {
                 echo "Updating stack"
                 sh ("aws cloudformation update-stack --stack-name my-react-app-preprod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod --region us-east-1")
               } else {
@@ -137,8 +142,9 @@ pipeline {
                 STACK_PROCESSING_COMPLETED = sh (
                   script: "aws cloudformation describe-stacks --stack-name my-react-app-preprod-es --query 'Stacks[0].StackStatus' | grep COMPLETE",
                   returnStdout: true
-                ).trim()
-                return (STACK_PROCESSING_COMPLETED != '');
+                ).trim() == ''
+                echo "Waiting for stack processing being completed. Current completion status is: ${STACK_PROCESSING_COMPLETED}"
+                return (STACK_PROCESSING_COMPLETED);
               }
             }
           }

@@ -13,13 +13,9 @@ pipeline {
   stages {
     stage('DEBUG') {
       steps {
-        script {
-          docker.image('cypress/base:6').withRun('-v $PWD:/my-app') { c ->
-              sh 'cd /my-app'
-              sh 'npm install cypress --save-dev'
-              sh './node_modules/.bin/cypress run --spec cypress/integration/simple_spec_es.js --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c'
-          }
-        }
+        sh 'docker run -tid -v $PWD:/my-app --name cypress --rm cypress/base:6'
+        sh 'docker exec cypress sh -c "cd /my-app && npm install cypress --save-dev && ./node_modules/.bin/cypress run --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"'
+        sh 'docker stop cypress'
       }
     }
 

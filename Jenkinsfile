@@ -4,17 +4,8 @@ library 'cfn-utils'
 pipeline {
   agent any
 
-  parameters {
-    string (
-      defaultValue: '',
-      description: 'Proxy URL',
-      name : 'PROXY'
-    )
-    string (
-      defaultValue: 'menpedro-react-app',
-      description: 'S3 prefix',
-      name : 'S3_PREFIX'
-    )
+  environment {
+    S3_PREFIX = 'menpedro-react-app'
   }
 
   triggers {
@@ -22,12 +13,6 @@ pipeline {
   }
 
   stages {
-    stage('Test CFN - Preprod in US') {
-      steps {
-        deployStack "my-react-app-preprod-us", "us-east-1", "ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=pre-prod"
-      }
-    }
-
     stage('Build (core) and unit test') {
       agent {
         docker {
@@ -39,10 +24,10 @@ pipeline {
       }
       steps {
         script {
-          if ("${params.PROXY}" != '') {
-            echo "Will use ${params.PROXY} for proxying"
-            sh "npm config set proxy ${params.PROXY}"
-            sh "npm config set https-proxy ${params.PROXY}"
+          if (env.HTTP_PROXY != '') {
+            echo "Will use ${env.HTTP_PROXY} for proxying"
+            sh "npm config set proxy ${env.HTTP_PROXY}"
+            sh "npm config set https-proxy ${env.HTTPS_PROXY}"
           }
         }
         sh "npm install"
@@ -64,10 +49,10 @@ pipeline {
           }
           steps {
             script {
-              if ("${params.PROXY}" != '') {
-                echo "Will use ${params.PROXY} for proxying"
-                sh "npm config set proxy ${params.PROXY}"
-                sh "npm config set https-proxy ${params.PROXY}"
+              if (env.HTTP_PROXY != '') {
+                echo "Will use ${env.HTTP_PROXY} for proxying"
+                sh "npm config set proxy ${env.HTTP_PROXY}"
+                sh "npm config set https-proxy ${env.HTTPS_PROXY}"
               }
             }
             sh "npm install"
@@ -86,10 +71,10 @@ pipeline {
           }
           steps {
             script {
-              if ("${params.PROXY}" != '') {
-                echo "Will use ${params.PROXY} for proxying"
-                sh "npm config set proxy ${params.PROXY}"
-                sh "npm config set https-proxy ${params.PROXY}"
+              if (env.HTTP_PROXY != '') {
+                echo "Will use ${env.HTTP_PROXY} for proxying"
+                sh "npm config set proxy ${env.HTTP_PROXY}"
+                sh "npm config set https-proxy ${env.HTTPS_PROXY}"
               }
             }
             sh "npm install"
@@ -104,33 +89,12 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            deployStack "my-react-app-preprod-us", "us-east-1", "ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=pre-prod"
+            deployStack "my-react-app-preprod-us", "us-east-1", "ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod"
           }
         }
         stage('ES') {
           steps {
-            script {
-              STACK_EXISTS = sh (
-                script: "aws cloudformation describe-stacks --stack-name my-react-app-preprod-es --region us-east-1",
-                returnStatus: true
-              ) == 0
-              echo "Stack exists?: ${STACK_EXISTS}"
-              if (STACK_EXISTS) {
-                echo "Updating stack"
-                STACK_UPDATE_REQUIRED = sh (
-                  script: "aws cloudformation update-stack --stack-name my-react-app-preprod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod --region us-east-1",
-                  returnStatus: true
-                ) == 0
-                echo "Stack update required?: ${STACK_UPDATE_REQUIRED}"
-                if (STACK_UPDATE_REQUIRED) {
-                  sh ("aws cloudformation wait stack-update-complete --stack-name my-react-app-preprod-es --region us-east-1")
-                }
-              } else {
-                echo "Creating stack"
-                sh ("aws cloudformation create-stack --stack-name my-react-app-preprod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod --region us-east-1")
-                sh ("aws cloudformation wait stack-create-complete --stack-name my-react-app-preprod-es --region us-east-1")
-              }
-            }
+            deployStack "my-react-app-preprod-es", "us-east-1", "ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod"
           }
         }
       }
@@ -170,10 +134,10 @@ pipeline {
           }
           steps {
             script {
-              if ("${params.PROXY}" != '') {
-                echo "Will use ${params.PROXY} for proxying"
-                sh "npm config set proxy ${params.PROXY}"
-                sh "npm config set https-proxy ${params.PROXY}"
+              if (env.HTTP_PROXY != '') {
+                echo "Will use ${env.HTTP_PROXY} for proxying"
+                sh "npm config set proxy ${env.HTTP_PROXY}"
+                sh "npm config set https-proxy ${env.HTTPS_PROXY}"
               }
             }
             sh "npm install cypress --save-dev"
@@ -191,10 +155,10 @@ pipeline {
           }
           steps {
             script {
-              if ("${params.PROXY}" != '') {
-                echo "Will use ${params.PROXY} for proxying"
-                sh "npm config set proxy ${params.PROXY}"
-                sh "npm config set https-proxy ${params.PROXY}"
+              if (env.HTTP_PROXY != '') {
+                echo "Will use ${env.HTTP_PROXY} for proxying"
+                sh "npm config set proxy ${env.HTTP_PROXY}"
+                sh "npm config set https-proxy ${env.HTTPS_PROXY}"
               }
             }
             sh "npm install cypress --save-dev"
@@ -208,34 +172,12 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            script {
-              STACK_EXISTS=1
-              sh ("aws cloudformation describe-stacks --stack-name my-react-app-prod-us --region us-east-1 || STACK_EXISTS=0")
-              echo "Stack exists?: ${STACK_EXISTS}"
-              if ("${STACK_EXISTS}" == 1) {
-                echo "Updating stack"
-                sh ("aws cloudformation update-stack --stack-name my-react-app-prod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=prod --region us-east-1")
-              } else {
-                echo "Creating stack"
-                sh ("aws cloudformation create-stack --stack-name my-react-app-prod-us --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=prod --region us-east-1")
-              }
-            }
+            deployStack "my-react-app-prod-us", "us-east-1", "ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=prod"
           }
         }
         stage('ES') {
           steps {
-            script {
-              STACK_EXISTS=1
-              sh ("aws cloudformation describe-stacks --stack-name my-react-app-prod-es --region us-east-1 || STACK_EXISTS=0")
-              echo "Stack exists?: ${STACK_EXISTS}"
-              if ("${STACK_EXISTS}" == 1) {
-                echo "Updating stack"
-                sh ("aws cloudformation update-stack --stack-name my-react-app-prod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=prod --region us-east-1")
-              } else {
-                echo "Creating stack"
-                sh ("aws cloudformation create-stack --stack-name my-react-app-prod-es --template-body file://infra/infrastructure.yaml --parameters ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=prod --region us-east-1")
-              }
-            }
+            deployStack "my-react-app-prod-es", "us-east-1", "ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=prod"
           }
         }
       }

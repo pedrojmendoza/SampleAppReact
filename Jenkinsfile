@@ -13,10 +13,12 @@ pipeline {
   stages {
     stage('DEBUG') {
       steps {
-        docker.image('cypress/base:6').withRun('-v $PWD:/my-app -a stdin -a stdout -i -t /bin/bash') { c ->
-            sh 'cd my-app'
-            sh 'npm install cypress --save-dev'
-            sh './node_modules/.bin/cypress run --spec cypress/integration/simple_spec_es.js --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c'
+        script {
+          docker.image('cypress/base:6').withRun('-v $PWD:/my-app -a stdin -a stdout -i -t /bin/bash') { c ->
+              sh 'cd my-app'
+              sh 'npm install cypress --save-dev'
+              sh './node_modules/.bin/cypress run --spec cypress/integration/simple_spec_es.js --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c'
+          }
         }
       }
     }

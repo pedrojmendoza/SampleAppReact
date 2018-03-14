@@ -22,8 +22,8 @@ pipeline {
       }
       steps {
         //sh "scripts/configNpm.sh ${env.HTTP_PROXY} ${env.HTTPS_PROXY}"
-        npm config set proxy ${env.HTTP_PROXY}
-        npm config set https-proxy ${env.HTTPS_PROXY}
+        sh "npm config set proxy ${env.HTTP_PROXY}"
+        sh "npm config set https-proxy ${env.HTTPS_PROXY}"
         sh "npm install"
         sh "npm run build"
         sh "CI=true npm test"

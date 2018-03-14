@@ -17,7 +17,8 @@ pipeline {
         sh 'docker exec cypress sh -c "cd /my-app && npm install cypress --save-dev && ./node_modules/.bin/cypress run --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"'
       }
       post {
-        always { 
+        always {
+          sh 'docker exec cypress sh -c "cd /my-app && rm -rf node_modules/ && rm -rf cypress/screenshots/ && rm -rf cypress/videos/"'
           sh 'docker stop cypress'
         }
       }

@@ -1,6 +1,4 @@
 #!/usr/bin/env groovy
-library 'cfn-utils'
-
 pipeline {
   agent any
 
@@ -13,6 +11,11 @@ pipeline {
   }
 
   stages {
+    stage('DEBUG') {
+      steps {
+        sh "script/deployStack my-react-app-preprod-us us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod\""
+      }
+    }
     stage('Build (core) and unit test') {
       agent {
         docker {
@@ -89,12 +92,12 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            deployStack "my-react-app-preprod-us", "us-east-1", "ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod"
+            sh "script/deployStack my-react-app-preprod-us us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod\""
           }
         }
         stage('ES') {
           steps {
-            deployStack "my-react-app-preprod-es", "us-east-1", "ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod"
+            sh "script/deployStack my-react-app-preprod-es us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod\""
           }
         }
       }

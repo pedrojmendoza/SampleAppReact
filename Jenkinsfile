@@ -42,7 +42,9 @@ pipeline {
             HOME="."
           }
           steps {
-            sh "scripts/configNpm.sh ${env.HTTP_PROXY} ${env.HTTPS_PROXY}"
+            //sh "scripts/configNpm.sh ${env.HTTP_PROXY} ${env.HTTPS_PROXY}"
+            sh "npm config set proxy ${env.HTTP_PROXY}"
+            sh "npm config set https-proxy ${env.HTTPS_PROXY}"
             sh "npm install"
             sh "REACT_APP_US_FEATURE=true npm run build"
             stash includes: 'build/**', name: 'build_US'
@@ -58,7 +60,9 @@ pipeline {
             HOME="."
           }
           steps {
-            sh "scripts/configNpm.sh ${env.HTTP_PROXY} ${env.HTTPS_PROXY}"
+            //sh "scripts/configNpm.sh ${env.HTTP_PROXY} ${env.HTTPS_PROXY}"
+            sh "npm config set proxy ${env.HTTP_PROXY}"
+            sh "npm config set https-proxy ${env.HTTPS_PROXY}"            
             sh "npm install"
             sh "REACT_APP_ES_FEATURE=true npm run build"
             stash includes: 'build/**', name: 'build_ES'

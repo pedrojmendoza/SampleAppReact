@@ -69,11 +69,13 @@ pipeline {
       parallel {
         stage('US') {
           steps {
+            echo "deploying to US ..."
             //sh "scripts/deployStack.sh my-react-app-preprod-us us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod\""
           }
         }
         stage('ES') {
           steps {
+            echo "deploying to ES ..."
             //sh "scripts/deployStack.sh my-react-app-preprod-es us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod\""
           }
         }
@@ -118,11 +120,13 @@ pipeline {
       parallel {
         stage('US') {
           steps {
+            echo "deploying to US ..."
             //sh "scripts/deployStack.sh my-react-app-prod-us us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=prod\""
           }
         }
         stage('ES') {
           steps {
+            echo "deploying to ES ..."
             //sh "scripts/deployStack.sh my-react-app-prod-es us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=prod\""
           }
         }

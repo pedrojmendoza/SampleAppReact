@@ -111,7 +111,7 @@ pipeline {
 
     stage ('UI Test') {
       steps {
-        sh 'docker run -tid -v $PWD:/my-app --name cypress --rm cypress/base:6'
+        sh "docker run -tid -v $PWD:/my-app -e HTTP_PROXY -e HTTPS_PROXY --name cypress --rm cypress/base:6"
         sh "docker exec cypress sh -c 'cd /my-app && npm config set proxy ${env.HTTP_PROXY} && npm config set https-proxy ${env.HTTPS_PROXY} && npm install cypress --save-dev && ./node_modules/.bin/cypress run --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c'"
       }
       post {

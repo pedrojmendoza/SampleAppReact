@@ -24,7 +24,7 @@ pipeline {
       }
       steps {
         script {
-          if (env.HTTP_PROXY != '') {
+          if (env.HTTP_PROXY != null) {
             echo "Will use ${env.HTTP_PROXY} for proxying"
             sh "npm config set proxy ${env.HTTP_PROXY}"
             sh "npm config set https-proxy ${env.HTTPS_PROXY}"
@@ -49,7 +49,7 @@ pipeline {
           }
           steps {
             script {
-              if (env.HTTP_PROXY != '') {
+              if (env.HTTP_PROXY != null) {
                 echo "Will use ${env.HTTP_PROXY} for proxying"
                 sh "npm config set proxy ${env.HTTP_PROXY}"
                 sh "npm config set https-proxy ${env.HTTPS_PROXY}"
@@ -71,7 +71,7 @@ pipeline {
           }
           steps {
             script {
-              if (env.HTTP_PROXY != '') {
+              if (env.HTTP_PROXY != null) {
                 echo "Will use ${env.HTTP_PROXY} for proxying"
                 sh "npm config set proxy ${env.HTTP_PROXY}"
                 sh "npm config set https-proxy ${env.HTTPS_PROXY}"
@@ -134,7 +134,7 @@ pipeline {
           }
           steps {
             script {
-              if (env.HTTP_PROXY != '') {
+              if (env.HTTP_PROXY != null) {
                 echo "Will use ${env.HTTP_PROXY} for proxying"
                 sh "npm config set proxy ${env.HTTP_PROXY}"
                 sh "npm config set https-proxy ${env.HTTPS_PROXY}"
@@ -155,7 +155,7 @@ pipeline {
           }
           steps {
             script {
-              if (env.HTTP_PROXY != '') {
+              if (env.HTTP_PROXY != null) {
                 echo "Will use ${env.HTTP_PROXY} for proxying"
                 sh "npm config set proxy ${env.HTTP_PROXY}"
                 sh "npm config set https-proxy ${env.HTTPS_PROXY}"

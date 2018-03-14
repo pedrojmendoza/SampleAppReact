@@ -11,11 +11,6 @@ pipeline {
   }
 
   stages {
-    stage('DEBUG') {
-      steps {
-        sh "scripts/deployStack.sh my-react-app-preprod-us us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod\""
-      }
-    }
     stage('Build (core) and unit test') {
       agent {
         docker {
@@ -26,13 +21,7 @@ pipeline {
         HOME="."
       }
       steps {
-        script {
-          if (env.HTTP_PROXY != null) {
-            echo "Will use ${env.HTTP_PROXY} for proxying"
-            sh "npm config set proxy ${env.HTTP_PROXY}"
-            sh "npm config set https-proxy ${env.HTTPS_PROXY}"
-          }
-        }
+        sh "scripts/configNpm.sh ${env.HTTP_PROXY} ${env.HTTPS_PROXY}"
         sh "npm install"
         sh "npm run build"
         sh "CI=true npm test"
@@ -92,12 +81,12 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            sh "script/deployStack my-react-app-preprod-us us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod\""
+            sh "scripts/deployStack.sh my-react-app-preprod-us us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod\""
           }
         }
         stage('ES') {
           steps {
-            sh "script/deployStack my-react-app-preprod-es us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod\""
+            sh "scripts/deployStack.sh my-react-app-preprod-es us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod\""
           }
         }
       }
@@ -175,12 +164,12 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            deployStack "my-react-app-prod-us", "us-east-1", "ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=prod"
+            sh "scripts/deployStack.sh my-react-app-prod-us us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=prod\""
           }
         }
         stage('ES') {
           steps {
-            deployStack "my-react-app-prod-es", "us-east-1", "ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=prod"
+            sh "scripts/deployStack.sh my-react-app-prod-es us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=prod\""
           }
         }
       }

@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-library 'processStack'
+library 'cfn-utils'
 
 pipeline {
   agent any
@@ -22,6 +22,12 @@ pipeline {
   }
 
   stages {
+    stage('Test CFN - Preprod in US') {
+      steps {
+        deployStack "my-react-app-preprod-us", "us-east-1", "ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=pre-prod"
+      }
+    }
+
     stage('Build (core) and unit test') {
       agent {
         docker {
@@ -98,7 +104,7 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            processStack "${params.S3_PREFIX}", "us", "preprod"
+            deployStack "my-react-app-preprod-us", "us-east-1", "ParameterKey=Prefix,ParameterValue=${params.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=pre-prod"
           }
         }
         stage('ES') {

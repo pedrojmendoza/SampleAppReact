@@ -69,12 +69,12 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            sh "scripts/deployStack.sh my-react-app-preprod-us us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod\""
+            //sh "scripts/deployStack.sh my-react-app-preprod-us us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod\""
           }
         }
         stage('ES') {
           steps {
-            sh "scripts/deployStack.sh my-react-app-preprod-es us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod\""
+            //sh "scripts/deployStack.sh my-react-app-preprod-es us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=preprod\""
           }
         }
       }
@@ -86,7 +86,7 @@ pipeline {
           steps {
             dir("US") {
               unstash 'build_US'
-              sh "aws s3 sync build/ s3://${env.S3_PREFIX}-preprod-us"
+              //sh "aws s3 sync build/ s3://${env.S3_PREFIX}-preprod-us"
             }
           }
         }
@@ -94,7 +94,7 @@ pipeline {
           steps {
             dir("ES") {
               unstash 'build_ES'
-              sh "aws s3 sync build/ s3://${env.S3_PREFIX}-preprod-es"
+              //sh "aws s3 sync build/ s3://${env.S3_PREFIX}-preprod-es"
             }
           }
         }
@@ -118,12 +118,12 @@ pipeline {
       parallel {
         stage('US') {
           steps {
-            sh "scripts/deployStack.sh my-react-app-prod-us us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=prod\""
+            //sh "scripts/deployStack.sh my-react-app-prod-us us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=prod\""
           }
         }
         stage('ES') {
           steps {
-            sh "scripts/deployStack.sh my-react-app-prod-es us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=prod\""
+            //sh "scripts/deployStack.sh my-react-app-prod-es us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=prod\""
           }
         }
       }
@@ -135,7 +135,7 @@ pipeline {
           steps {
             dir("US") {
               unstash 'build_US'
-              sh "aws s3 sync build/ s3://${env.S3_PREFIX}-prod-us"
+              //sh "aws s3 sync build/ s3://${env.S3_PREFIX}-prod-us"
             }
           }
         }
@@ -143,7 +143,7 @@ pipeline {
           steps {
             dir("ES") {
               unstash 'build_ES'
-              sh "aws s3 sync build/ s3://${env.S3_PREFIX}-prod-es"
+              //sh "aws s3 sync build/ s3://${env.S3_PREFIX}-prod-es"
             }
           }
         }

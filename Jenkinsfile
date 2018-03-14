@@ -106,7 +106,7 @@ pipeline {
         stage('US') {
           agent {
             docker {
-              image 'node:6'
+              image 'cypress/base:6'
             }
           }
           environment {
@@ -121,7 +121,7 @@ pipeline {
         stage('ES') {
           agent {
             docker {
-              image 'node:6'
+              image 'cypress/base:6'
             }
           }
           environment {

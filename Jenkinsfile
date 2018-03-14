@@ -106,7 +106,7 @@ pipeline {
           steps {
             dir("US") {
               unstash 'build_US'
-              sh "aws s3 sync build/ s3://${params.S3_PREFIX}-preprod-us"
+              sh "aws s3 sync build/ s3://${env.S3_PREFIX}-preprod-us"
             }
           }
         }
@@ -114,7 +114,7 @@ pipeline {
           steps {
             dir("ES") {
               unstash 'build_ES'
-              sh "aws s3 sync build/ s3://${params.S3_PREFIX}-preprod-es"
+              sh "aws s3 sync build/ s3://${env.S3_PREFIX}-preprod-es"
             }
           }
         }
@@ -189,7 +189,7 @@ pipeline {
           steps {
             dir("US") {
               unstash 'build_US'
-              sh "aws s3 sync build/ s3://${params.S3_PREFIX}-prod-us"
+              sh "aws s3 sync build/ s3://${env.S3_PREFIX}-prod-us"
             }
           }
         }
@@ -197,7 +197,7 @@ pipeline {
           steps {
             dir("ES") {
               unstash 'build_ES'
-              sh "aws s3 sync build/ s3://${params.S3_PREFIX}-prod-es"
+              sh "aws s3 sync build/ s3://${env.S3_PREFIX}-prod-es"
             }
           }
         }

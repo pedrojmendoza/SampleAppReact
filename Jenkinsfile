@@ -40,13 +40,7 @@ pipeline {
             HOME="."
           }
           steps {
-            script {
-              if (env.HTTP_PROXY != null) {
-                echo "Will use ${env.HTTP_PROXY} for proxying"
-                sh "npm config set proxy ${env.HTTP_PROXY}"
-                sh "npm config set https-proxy ${env.HTTPS_PROXY}"
-              }
-            }
+            sh "scripts/configNpm.sh ${env.HTTP_PROXY} ${env.HTTPS_PROXY}"
             sh "npm install"
             sh "REACT_APP_US_FEATURE=true npm run build"
             stash includes: 'build/*', name: 'build_US'
@@ -62,13 +56,7 @@ pipeline {
             HOME="."
           }
           steps {
-            script {
-              if (env.HTTP_PROXY != null) {
-                echo "Will use ${env.HTTP_PROXY} for proxying"
-                sh "npm config set proxy ${env.HTTP_PROXY}"
-                sh "npm config set https-proxy ${env.HTTPS_PROXY}"
-              }
-            }
+            sh "scripts/configNpm.sh ${env.HTTP_PROXY} ${env.HTTPS_PROXY}"
             sh "npm install"
             sh "REACT_APP_ES_FEATURE=true npm run build"
             stash includes: 'build/*', name: 'build_ES'
@@ -125,13 +113,7 @@ pipeline {
             HOME="."
           }
           steps {
-            script {
-              if (env.HTTP_PROXY != null) {
-                echo "Will use ${env.HTTP_PROXY} for proxying"
-                sh "npm config set proxy ${env.HTTP_PROXY}"
-                sh "npm config set https-proxy ${env.HTTPS_PROXY}"
-              }
-            }
+            sh "scripts/configNpm.sh ${env.HTTP_PROXY} ${env.HTTPS_PROXY}"
             sh "npm install cypress --save-dev"
             sh "./node_modules/.bin/cypress run --spec cypress/integration/simple_spec_us.js --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"
           }
@@ -146,13 +128,7 @@ pipeline {
             HOME="."
           }
           steps {
-            script {
-              if (env.HTTP_PROXY != null) {
-                echo "Will use ${env.HTTP_PROXY} for proxying"
-                sh "npm config set proxy ${env.HTTP_PROXY}"
-                sh "npm config set https-proxy ${env.HTTPS_PROXY}"
-              }
-            }
+            sh "scripts/configNpm.sh ${env.HTTP_PROXY} ${env.HTTPS_PROXY}"
             sh "npm install cypress --save-dev"
             sh "./node_modules/.bin/cypress run --spec cypress/integration/simple_spec_es.js --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"
           }

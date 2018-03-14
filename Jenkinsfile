@@ -13,7 +13,7 @@ pipeline {
   stages {
     stage('DEBUG') {
       steps {
-        sh "script/deployStack my-react-app-preprod-us us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod\""
+        sh "scripts/deployStack my-react-app-preprod-us us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=preprod\""
       }
     }
     stage('Build (core) and unit test') {

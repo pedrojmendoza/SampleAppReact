@@ -123,7 +123,7 @@ pipeline {
         }
         stage('ES') {
           steps {
-            sh "scripts/deployStack.sh my-react-app-prod-es us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=us ParameterKey=Environment,ParameterValue=prod\""
+            sh "scripts/deployStack.sh my-react-app-prod-es us-east-1 \"ParameterKey=Prefix,ParameterValue=${env.S3_PREFIX} ParameterKey=Country,ParameterValue=es ParameterKey=Environment,ParameterValue=prod\""
           }
         }
       }

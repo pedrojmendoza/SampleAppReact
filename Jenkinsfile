@@ -102,30 +102,14 @@ pipeline {
     }
 
     stage ('UI Test') {
-      parallel {
-        stage('US') {
-          steps {
-            sh 'docker run -tid -v $PWD:/my-app --name cypress-us --rm cypress/base:6'
-            sh 'docker exec cypress-us sh -c "cd /my-app && npm install cypress --save-dev && ./node_modules/.bin/cypress run --spec cypress/integration/simple_spec_us.js --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"'
-          }
-          post {
-            always {
-              sh 'docker exec cypress-us sh -c "cd /my-app && rm -rf node_modules/ && rm -rf cypress/screenshots/ && rm -rf cypress/videos/"'
-              sh 'docker stop cypress-us'
-            }
-          }
-        }
-        stage('ES') {
-          steps {
-            sh 'docker run -tid -v $PWD:/my-app --name cypress-es --rm cypress/base:6'
-            sh 'docker exec cypress-es sh -c "cd /my-app && npm install cypress --save-dev && ./node_modules/.bin/cypress run --spec cypress/integration/simple_spec_es.js --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"'
-          }
-          post {
-            always {
-              sh 'docker exec cypress-es sh -c "cd /my-app && rm -rf node_modules/ && rm -rf cypress/screenshots/ && rm -rf cypress/videos/"'
-              sh 'docker stop cypress-es'
-            }
-          }
+      steps {
+        sh 'docker run -tid -v $PWD:/my-app --name cypress --rm cypress/base:6'
+        sh 'docker exec cypress sh -c "cd /my-app && npm install cypress --save-dev && ./node_modules/.bin/cypress run --record --key 0262b5bb-dc12-4513-84eb-241c6b18f42c"'
+      }
+      post {
+        always {
+          sh 'docker exec cypress sh -c "cd /my-app && rm -rf node_modules/ && rm -rf cypress/screenshots/ && rm -rf cypress/videos/"'
+          sh 'docker stop cypress'
         }
       }
     }

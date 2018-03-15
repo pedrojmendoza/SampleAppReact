@@ -30,6 +30,18 @@ pipeline {
       }
     }
 
+    stage('Security test') {
+      agent {
+        docker {
+          image 'stono/hawkeye'
+          args '-v $PWD:/target'
+        }
+      }
+      steps {
+        echo "Security testing ..."
+      }
+    }
+
     stage ('Build') {
       parallel {
         stage('US') {

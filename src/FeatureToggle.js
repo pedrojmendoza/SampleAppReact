@@ -9,12 +9,12 @@ class FeatureToggle extends Component {
 
 FeatureToggle.propTypes = {
   show: PropTypes.bool,
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 FeatureToggle.defaultProps = {
   show: false,
-  children: []
+  children: [],
 };
 
 export default FeatureToggle;

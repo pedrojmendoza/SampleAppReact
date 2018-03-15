@@ -11,7 +11,7 @@ pipeline {
   }
 
   stages {
-    stage('Build (core) and unit test') {
+    stage('Build (core), linting and unit test') {
       agent {
         docker {
           image 'node:6'
@@ -25,7 +25,7 @@ pipeline {
         sh "npm config set proxy ${env.HTTP_PROXY}"
         sh "npm config set https-proxy ${env.HTTPS_PROXY}"
         sh "npm install"
-        sh "npm run build"
+        sh "npm run test:lint:js"
         sh "CI=true npm test"
       }
     }

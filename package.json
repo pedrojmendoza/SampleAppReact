@@ -8,12 +8,13 @@
     "react-dom": "^16.2.0",
     "react-feature-toggles": "^3.0.1",
     "react-scripts": "1.1.1",
-    "react-stepzilla": "^4.7.0"
+    "react-stepzilla": "^4.7.0",
+    "webdriverio": "^4.12.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test:lint:js": "eslint --ext=js --ext=jsx src/",    
+    "test:lint:js": "eslint --ext=js --ext=jsx src/",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
@@ -22,6 +23,8 @@
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.7.0"
+    "eslint-plugin-react": "^7.7.0",
+    "wdio-dot-reporter": "0.0.9",
+    "wdio-mocha-framework": "^0.5.13"
   }
 }
